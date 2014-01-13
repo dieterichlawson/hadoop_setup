@@ -158,5 +158,5 @@ First, start the HDFS services. This is just a one-liner that does it all at onc
 
 At this point you should be able to go to `http://localhost:50070/dfshealth.jsp` and see something like this:
 
-![DFS picture](https://github.com/dieterichlawson/hadoop_setup/blob/master/dfs.png "DFS Healthy")
+![DFS picture](https://raw2.github.com/dieterichlawson/hadoop_setup/master/dfs.png "DFS Healthy")
 
