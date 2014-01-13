@@ -149,6 +149,7 @@ LINE GOES HERE
 
 ###Step 4 - Start Your Engines
 
+####4.1 Start the HDFS (namenode, secondarynamenode, and datanode)
 First, start the HDFS services. This is just a one-liner that does it all at once but you can do it however you want (different terminal windows, etc...) because you might get a lot of log lines scrolling:
 
 ```
@@ -156,7 +157,18 @@ First, start the HDFS services. This is just a one-liner that does it all at onc
 >./bin/hdfs namenode & ./bin/hdfs secondarynamenode & ./bin/hdfs datanode &
 ```
 
-At this point you should be able to go to `http://localhost:50070/dfshealth.jsp` and see something like this:
+At this point you should be able to go to [http://localhost:50070/dfshealth.jsp](http://localhost:50070/dfshealth.jsp) and see something like this:
 
 ![DFS picture](https://raw2.github.com/dieterichlawson/hadoop_setup/master/dfs.png "DFS Healthy")
+
+####4.2 Start the Yarn services
+
+Now we need to start the Yarn services. For those of you familiar with older versions of Hadoop this is essentially the tasktracker, jobtracker, etc... Again, this is a one-liner that can be messed with if necessary.
+
+```
+> cd $YARN_HOME
+> bin/yarn resourcemanager & bin/yarn nodemanager
+```
+You should now be able to go to [http://localhost:8088/cluster](http://localhost:8088/cluster) and see this:
+
 
