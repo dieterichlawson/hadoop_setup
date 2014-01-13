@@ -171,4 +171,4 @@ Now we need to start the Yarn services. For those of you familiar with older ver
 ```
 You should now be able to go to [http://localhost:8088/cluster](http://localhost:8088/cluster) and see this:
 
-
+![jobtracker](https://raw2.github.com/dieterichlawson/hadoop_setup/master/jobtracker.png "Jobtracker")
