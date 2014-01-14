@@ -8,10 +8,10 @@ This is a quick guide to setting up Cloudera's CDH-2.0.0-cdh4 in local mode for 
 * A Mac (not tested on anything else)
 
 #### Directories
-Before we start you should pick a directory where you want to put your hadoop installation. I put mine in `~/dev/cs246`, but feel free to pick your own directory. Just be sure to change the commands and paths properly when you do. I'll refer
+Before we start you should pick a directory where you want to put your hadoop installation. I put mine in `~/dev/cs246`, but feel free to pick your own directory. Just be sure to careful to change the commands and paths properly when you do. I'll try to give you a heads up when you should do this.
 
 ###Step 1 - Download and Setup
-Download Cloudera's Hadoop distribution, untar it, and set up a link to the directory so things are a bit cleaner. If you don't have wget, just download the tar.gz file and put it in your chosen directory.
+Download Cloudera's Hadoop distribution, untar it, and set up a link to the directory so things are a bit cleaner. If you don't have `wget`, just download the tar.gz file and put it in your chosen directory.
 
 ```
 > cd ~/dev/cs246
@@ -38,7 +38,7 @@ lrwxr-xr-x   1 dlaw  wheel   21 Jan 13 14:51 hadoop -> hadoop-2.0.0-cdh4.0.0
 drwxr-xr-x  12 dlaw  wheel  408 Jun  4  2012 hadoop-2.0.0-cdh4.0.0
 drwxr-xr-x   3 dlaw  wheel  102 Jan 13 15:05 yarn_data
 ```
-Add a line to your `.bash_profile` to export a `YARN_HOME` environment variable. `YARN_HOME` should point to the `hadoop` link you made that in turn points to `hadoop-2.0.0-cdh4.0.0`. Don't forget to source it afterwards.
+Add a line to your `.bash_profile` to export a `YARN_HOME` environment variable. `YARN_HOME` should point to the `hadoop` link you made, which in turn points to the `hadoop-2.0.0-cdh4.0.0` folder. Don't forget to source it afterwards.
 
 ```
 > echo 'export YARN_HOME=$HOME/dev/cs246/hadoop' >> ~/.bash_profile
@@ -124,7 +124,7 @@ Edit `$YARN_HOME/etc/hadoop/mapred-site.xml` so that it looks like this:
 
 ####2.5 yarn-env.sh
 
-Edit `$YARN_HOME/etc/hadoop/mapred-site.xml` by adding the following lines under the `export YARN_CONF_DIR` line:
+Edit `$YARN_HOME/etc/hadoop/yarn-env.sh` by adding the following lines under the `export YARN_CONF_DIR` line:
 
 ```
 export HADOOP_CONF_DIR="${HADOOP_CONF_DIR:-$YARN_HOME/etc/hadoop}"
@@ -138,13 +138,13 @@ This sets up the HDFS file system for the namenode before we bring it online
 
 ```
 > cd $YARN_HOME
-> bin/hdfs namenode -format
+> ./bin/hdfs namenode -format
 ```
 
 You should see a ton of text, but somewhere in there you should see a line that says something like:
 
 ```
-LINE GOES HERE
+14/01/13 19:52:50 INFO namenode.NNStorage: Storage directory /Users/dlaw/dev/cs246/yarn_data/hdfs/namenode has been successfully formatted
 ```
 
 ###Step 4 - Start Your Engines
@@ -163,11 +163,11 @@ At this point you should be able to go to [http://localhost:50070/dfshealth.jsp]
 
 ####4.2 Start the Yarn services
 
-Now we need to start the Yarn services. For those of you familiar with older versions of Hadoop this is essentially the tasktracker, jobtracker, etc... Again, this is a one-liner that can be messed with if necessary.
+Now we need to start the Yarn services. For those of you familiar with older versions of Hadoop this is essentially the tasktracker, jobtracker, etc... Your terminal will probably have been taken over by the HDFS processes' logging, so you should probably start a new terminal tab. Again, this is a one-liner that can be messed with if necessary.
 
 ```
 > cd $YARN_HOME
-> bin/yarn resourcemanager & bin/yarn nodemanager
+> ./bin/yarn resourcemanager & ./bin/yarn nodemanager &
 ```
 You should now be able to go to [http://localhost:8088/cluster](http://localhost:8088/cluster) and see this:
 
@@ -175,11 +175,31 @@ You should now be able to go to [http://localhost:8088/cluster](http://localhost
 
 Congratulations! You now have a working Hadoop setup.
 
-### Appendix 1 - Foreman
+### Step 5 Final Details
 
-Foreman is a useful tool that lets you start, stop, and watch groups of services. I **highly**  recommend you use it because it provides a nice output and a robust way to easily start up your local Hadoop cluster. You can find out more about Foreman [here](https://github.com/ddollar/foreman).
+First, we want to be able to run the `hadoop` command so you should add your `$YARN_HOME/bin` directory to your path like this (changing the path if you need to):
 
-Foreman uses a file called a 'Procfile' that defines the processes you are managing. In your $HDP_DIR you can create a file called `Procfile` that contains the following:
+```
+> echo 'export PATH="$PATH:$HOME/dev/cs246/hadoop/bin"' >> ~/.bash_profile
+> source ~/.bash_profile
+```
+
+#### Option One
+
+```
+> cd $YARN_HOME
+> ./bin/hdfs namenode & ./bin/hdfs secondarynamenode & ./bin/hdfs datanode & ./bin/yarn resourcemanager & ./bin/yarn nodemanager &
+
+```
+This line starts all the processes at the same time, and will give you one window flooded with the logging output. This works just fine. To stop it, you could either `grep` through `ps` and kill the processes or find their `pids` with the `jps` command (lists all Java processes). I honestly don't know of a good way to gracefully bring down the cluster if you start it this way.
+
+However, there is a better way.
+
+#### Option Two: Foreman
+
+Foreman is a useful tool that lets you start and stop groups of services. I **highly**  recommend you use it because it provides a nice output and a robust way to easily start up your local Hadoop cluster. You can find out more about Foreman and it install it [here](https://github.com/ddollar/foreman).
+
+Foreman uses a file called a "Procfile" that defines the processes you are managing. In your you can create a file called `Procfile` that contains the following:
 
 ```
 namenode: hadoop/bin/hdfs namenode
@@ -189,7 +209,7 @@ resourcemgr: hadoop/bin/yarn resourcemanager
 nodemgr: hadoop/bin/yarn nodemanager
 ```
 
-Then, to start up the Hadoop cluster you only need `cd` into `$HDP_DIR` and run:
+Then, to start up the Hadoop cluster you only need `cd` into the directory with your Procfile in it and run:
 
 ```
 foreman start
