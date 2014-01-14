@@ -2,8 +2,6 @@ This is a quick guide to setting up Cloudera's CDH-2.0.0-cdh4 in local mode for 
 
 **NOTE**: This is *not* a guide to setting up Eclipse locally, which you will also have to do if you want to use Hadoop's Java API outside of the provided VM. Be forewarned that getting Eclipse set up might be harder than getting Hadoop set up so go down this route at your own risk.
 
-### Preliminaries
-
 #### Requirements
 
 * Java 1.6
@@ -13,7 +11,7 @@ This is a quick guide to setting up Cloudera's CDH-2.0.0-cdh4 in local mode for 
 Before we start you should pick a directory where you want to put your hadoop installation. I put mine in `~/dev/cs246`, but feel free to pick your own directory. Just be sure to change the commands and paths properly when you do. I'll refer
 
 ###Step 1 - Download and Setup
-Download Cloudera's Hadoop distribution, untar it, and set up a link to the directory so things are a bit cleaner.
+Download Cloudera's Hadoop distribution, untar it, and set up a link to the directory so things are a bit cleaner. If you don't have wget, just download the tar.gz file and put it in your chosen directory.
 
 ```
 > cd ~/dev/cs246
