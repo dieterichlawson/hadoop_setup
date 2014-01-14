@@ -1,11 +1,22 @@
-###Step 0 - Requirements and Directories
+This is a quick guide to setting up Cloudera's CDH-2.0.0-cdh4 in local mode for CS246 and is largely a cleaned up version of [this blog article](http://practicalcloudcomputing.com/post/26448910436/install-and-run-hadoop-yarn-in-10-easy-steps). 
 
+**NOTE**: This is *not* a guide to setting up Eclipse locally, which you will also have to do if you want to use Hadoop's Java API outside of the provided VM. Be forewarned that getting Eclipse set up might be harder than getting Hadoop set up so go down this route at your own risk.
+
+### Preliminaries
+
+#### Requirements
+
+* Java 1.6
+* A Mac (not tested on anything else)
+
+#### Directories
+Before we start you should pick a directory where you want to put your hadoop installation. I put mine in `~/dev/cs246`, but feel free to pick your own directory. Just be sure to change the commands and paths properly when you do. I'll refer
 
 ###Step 1 - Download and Setup
 Download Cloudera's Hadoop distribution, untar it, and set up a link to the directory so things are a bit cleaner.
 
 ```
-> cd $HDP_DIR
+> cd ~/dev/cs246
 > wget http://archive.cloudera.com/cdh4/cdh/4/hadoop-2.0.0-cdh4.0.0.tar.gz
 > tar -xvzf hadoop-2.0.0-cdh4.0.0.tar.gz
 > ln -sf hadoop-2.0.0-cdh4.0.0 hadoop
@@ -13,14 +24,12 @@ Download Cloudera's Hadoop distribution, untar it, and set up a link to the dire
 ```
 We also need to create 2 directories that will hold the data for the namenode's filesystem and the datanode's filesystem. I chose to put these as siblings to my hadoop directory as follows.
 
-In `$HDP_DIR`:
-
 ```
 > mkdir -p yarn_data/hdfs/namenode
 > mkdir yarn_data/hdfs/datanode
 ```
 
-After this your `$HDP_DIR` should look something like this.
+After this your directory should look something like this.
 
 ```
 > ls -la
@@ -31,17 +40,11 @@ lrwxr-xr-x   1 dlaw  wheel   21 Jan 13 14:51 hadoop -> hadoop-2.0.0-cdh4.0.0
 drwxr-xr-x  12 dlaw  wheel  408 Jun  4  2012 hadoop-2.0.0-cdh4.0.0
 drwxr-xr-x   3 dlaw  wheel  102 Jan 13 15:05 yarn_data
 ```
-Add a line to your `.bash_profile` to export a `YARN_HOME` environment variable, and don't forget to source it afterwards.
+Add a line to your `.bash_profile` to export a `YARN_HOME` environment variable. `YARN_HOME` should point to the `hadoop` link you made that in turn points to `hadoop-2.0.0-cdh4.0.0`. Don't forget to source it afterwards.
 
 ```
-> echo 'export YARN_HOME=$HDP_DIR/hadoop' >> ~/.bash_profile
+> echo 'export YARN_HOME=$HOME/dev/cs246/hadoop' >> ~/.bash_profile
 > source ~/.bash_profile
-```
-
-mine looks like this:
-
-```
-export YARN_HOME=$HOME/dev/cs246/hadoop
 ```
 
 ###Step 2 - Edit Config Files
@@ -67,7 +70,7 @@ Edit `$YARN_HOME/etc/hadoop/core-site.xml` so that it looks like this:
 
 Edit `$YARN_HOME/etc/hadoop/hdfs-site.xml` so that it looks like this:
 
-Note that `$HDP_DIR` should be replaced by the *absolute* path to your `$HDP_DIR`.
+Note that you should include the *absolute* paths to the directory that contains your hadoop installation as the values for `dfs.namenode.name.dir` and `dfs.datanode.data.dir`. My hadoop installation is in `~/dev/cs246` so I used `/Users/dlaw/dev/cs246/...`
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -80,11 +83,11 @@ Note that `$HDP_DIR` should be replaced by the *absolute* path to your `$HDP_DIR
   </property>
   <property>
     <name>dfs.namenode.name.dir</name>
-    <value>file:$HDP_DIR/yarn_data/hdfs/namenode</value>
+    <value>file:/Users/dlaw/dev/cs246/yarn_data/hdfs/namenode</value>
   </property>
   <property>
     <name>dfs.datanode.data.dir</name>
-    <value>file:$HDP_DIR/yarn_data/hdfs/datanode</value>
+    <value>file:/Users/dlaw/dev/cs246/yarn_data/hdfs/datanode</value>
   </property>
 </configuration>
 ```
@@ -176,9 +179,9 @@ Congratulations! You now have a working Hadoop setup.
 
 ### Appendix 1 - Foreman
 
-Foreman is a useful tool that lets you start, stop, and watch groups of services. It provides a nice output and a robust way to easily start up your local Hadoop cluster. You can find out more about Foreman [here](https://github.com/ddollar/foreman).
+Foreman is a useful tool that lets you start, stop, and watch groups of services. I **highly**  recommend you use it because it provides a nice output and a robust way to easily start up your local Hadoop cluster. You can find out more about Foreman [here](https://github.com/ddollar/foreman).
 
-Foreman uses a file called a 'Procfile' that defines what processes you want to start and stop. In your $HDP_DIR you can create a file called just `Procfile` that contains the following:
+Foreman uses a file called a 'Procfile' that defines the processes you are managing. In your $HDP_DIR you can create a file called `Procfile` that contains the following:
 
 ```
 namenode: hadoop/bin/hdfs namenode
@@ -186,7 +189,6 @@ secondarynn: hadoop/bin/hdfs secondarynamenode
 datanode: hadoop/bin/hdfs datanode
 resourcemgr: hadoop/bin/yarn resourcemanager
 nodemgr: hadoop/bin/yarn nodemanager
-
 ```
 
 Then, to start up the Hadoop cluster you only need `cd` into `$HDP_DIR` and run:
