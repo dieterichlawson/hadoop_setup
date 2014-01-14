@@ -184,34 +184,46 @@ First, we want to be able to run the `hadoop` command so you should add your `$Y
 > source ~/.bash_profile
 ```
 
-#### Option One
+You should now be able to run:
+
+```
+hadoop fs -ls /
+```
+
+from any directory, but it shouldn't return anything because you haven't put anything on the HDFS yet.
+
+
+
+#### Starting and Stopping: An Option
+
+We also have to manage starting and stopping the cluster. Here is one option:
 
 ```
 > cd $YARN_HOME
 > ./bin/hdfs namenode & ./bin/hdfs secondarynamenode & ./bin/hdfs datanode & ./bin/yarn resourcemanager & ./bin/yarn nodemanager &
-
 ```
-This line starts all the processes at the same time, and will give you one window flooded with the logging output. This works just fine. To stop it, you could either `grep` through `ps` and kill the processes or find their `pids` with the `jps` command (lists all Java processes). I honestly don't know of a good way to gracefully bring down the cluster if you start it this way.
+This line starts all the processes at the same time, and will give you one window flooded with the logging output. This works just fine, but to stop it, you could either `grep` through `ps` and kill the processes or find their `pids` with the `jps` command (lists all Java processes). I honestly don't know of a good way to gracefully bring down the cluster if you start it this way, but if you do then go for it.
 
-However, there is a better way.
+There is another option that I prefer called 'Foreman'.
 
 #### Option Two: Foreman
 
-Foreman is a useful tool that lets you start and stop groups of services. I **highly**  recommend you use it because it provides a nice output and a robust way to easily start up your local Hadoop cluster. You can find out more about Foreman and it install it [here](https://github.com/ddollar/foreman).
+Foreman is a useful tool that lets you start and stop groups of services. I **highly**  recommend you use it because it provides a nice output and a robust way to easily start and stop your local Hadoop cluster. You can find out more about Foreman and it install it [here](https://github.com/ddollar/foreman).
 
-Foreman uses a file called a "Procfile" that defines the processes you are managing. In your you can create a file called `Procfile` that contains the following:
+Foreman uses a file called a "Procfile" that defines the processes you are managing. In your `$YARN_HOME` you can create a file called `Procfile` that contains the following:
 
 ```
-namenode: hadoop/bin/hdfs namenode
-secondarynn: hadoop/bin/hdfs secondarynamenode
-datanode: hadoop/bin/hdfs datanode
-resourcemgr: hadoop/bin/yarn resourcemanager
-nodemgr: hadoop/bin/yarn nodemanager
+namenode: bin/hdfs namenode
+secondarynn: bin/hdfs secondarynamenode
+datanode: bin/hdfs datanode
+resourcemgr: bin/yarn resourcemanager
+nodemgr: bin/yarn nodemanager
 ```
 
 Then, to start up the Hadoop cluster you only need `cd` into the directory with your Procfile in it and run:
 
 ```
+cd $YARN_HOME
 foreman start
 ```
 
