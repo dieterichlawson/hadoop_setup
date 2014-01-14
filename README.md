@@ -10,9 +10,10 @@ Pull requests/corrections/recommendations welcome.
 * A Mac (not tested on anything else)
 
 #### Directories
-Before we start you should pick a directory where you want to put your hadoop installation. I put mine in `~/dev/cs246`, but feel free to pick your own directory. Just be sure to careful to change the commands and paths properly when you do. I'll try to give you a heads up when you should do this.
+Before we start you should pick a directory where you want to put your hadoop installation. I put mine in `~/dev/cs246`, but feel free to pick your own directory. Just be careful to change the commands and paths properly when you do. I'll try to give you a heads up when you should do this.
 
 ###Step 1 - Download and Setup
+
 Download Cloudera's Hadoop distribution, untar it, and set up a link to the directory so things are a bit cleaner. If you don't have `wget`, just download the tar.gz file and put it in your chosen directory.
 
 ```
