@@ -1,6 +1,8 @@
-This is a quick guide to setting up Cloudera's CDH-2.0.0-cdh4 in local mode for CS246 and is largely a cleaned up version of [this blog article](http://practicalcloudcomputing.com/post/26448910436/install-and-run-hadoop-yarn-in-10-easy-steps). 
+This is a quick guide to setting up Cloudera's CDH-2.0.0-cdh4 in local mode for CS246 and is largely a cleaned up and modified version of [this blog article](http://practicalcloudcomputing.com/post/26448910436/install-and-run-hadoop-yarn-in-10-easy-steps). 
 
-**NOTE**: This is *not* a guide to setting up Eclipse locally, which you will also have to do if you want to use Hadoop's Java API outside of the provided VM. Be forewarned that getting Eclipse set up might be harder than getting Hadoop set up so go down this route at your own risk.
+Pull requests/corrections/recommendations welcome.
+
+**NOTE**: This is *not* a guide to setting up Eclipse locally, which you will also have to do if you want to use Hadoop's Java API outside of the provided VM. The short version of how to set up Eclipse is to download it and then install the m2e plugin (Maven for Eclipse). Then you should generally be able to follow the HW0 guidelines for setting up a Hadoop project.
 
 #### Requirements
 
@@ -177,7 +179,7 @@ Congratulations! You now have a working Hadoop setup.
 
 ### Step 5 Final Details
 
-First, we want to be able to run the `hadoop` command so you should add your `$YARN_HOME/bin` directory to your path like this (changing the path if you need to):
+First, we want to be able to run the `hadoop` command so you should add your `$YARN_HOME/bin` directory to your path like this (changing `$HOME/dev/cs246` if you need to):
 
 ```
 > echo 'export PATH="$PATH:$HOME/dev/cs246/hadoop/bin"' >> ~/.bash_profile
