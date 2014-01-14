@@ -197,3 +197,8 @@ foreman start
 
 You will see something that looks like this:
 
+![foreman](https://raw2.github.com/dieterichlawson/hadoop_setup/master/foreman.png "foreman")
+
+Pretty, huh?
+
+To stop the cluster, just Ctrl-c foreman.
