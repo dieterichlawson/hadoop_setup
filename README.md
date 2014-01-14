@@ -41,7 +41,7 @@ lrwxr-xr-x   1 dlaw  wheel   21 Jan 13 14:51 hadoop -> hadoop-2.0.0-cdh4.0.0
 drwxr-xr-x  12 dlaw  wheel  408 Jun  4  2012 hadoop-2.0.0-cdh4.0.0
 drwxr-xr-x   3 dlaw  wheel  102 Jan 13 15:05 yarn_data
 ```
-Add a line to your `.bash_profile` to export a `YARN_HOME` environment variable. `YARN_HOME` should point to the `hadoop` link you made, which in turn points to the `hadoop-2.0.0-cdh4.0.0` folder. Don't forget to source it afterwards.
+Add a line to your `.bash_profile` to export a `YARN_HOME` environment variable. `YARN_HOME` should point to the `hadoop` link you made, which in turn points to the `hadoop-2.0.0-cdh4.0.0` folder. Don't forget to source it afterwards and change "`$HOME/dev/cs246`" to your chosen directory if you need to.
 
 ```
 > echo 'export YARN_HOME=$HOME/dev/cs246/hadoop' >> ~/.bash_profile
