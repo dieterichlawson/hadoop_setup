@@ -10,7 +10,7 @@ Pull requests/corrections/recommendations welcome.
 * A Mac (not tested on anything else)
 
 #### Directories
-Before we start you should pick a directory where you want to put your hadoop installation. I put mine in `~/dev/cs246`, and the commands that follow all use that directory. However, feel free to pick a different directory, just be careful to change the commands and paths properly when you do. I'll try to give you a heads up when you need to do this.
+Before we start you should pick a directory where you want to put your hadoop installation. I put mine in `~/dev/cs246`, and the commands that follow all use that directory. Feel free to pick a different directory, just be careful to change the commands and paths properly when you do. I'll try to give you a heads up when you need to do this.
 
 ###Step 1 - Download and Setup
 
