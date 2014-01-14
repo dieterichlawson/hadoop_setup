@@ -4,9 +4,8 @@
 ###Step 1 - Download and Setup
 Download Cloudera's Hadoop distribution, untar it, and set up a link to the directory so things are a bit cleaner.
 
-In `$HDP_DIR`:
-
 ```
+> cd $HDP_DIR
 > wget http://archive.cloudera.com/cdh4/cdh/4/hadoop-2.0.0-cdh4.0.0.tar.gz
 > tar -xvzf hadoop-2.0.0-cdh4.0.0.tar.gz
 > ln -sf hadoop-2.0.0-cdh4.0.0 hadoop
@@ -172,3 +171,29 @@ Now we need to start the Yarn services. For those of you familiar with older ver
 You should now be able to go to [http://localhost:8088/cluster](http://localhost:8088/cluster) and see this:
 
 ![jobtracker](https://raw2.github.com/dieterichlawson/hadoop_setup/master/jobtracker.png "Jobtracker")
+
+Congratulations! You now have a working Hadoop setup.
+
+### Appendix 1 - Foreman
+
+Foreman is a useful tool that lets you start, stop, and watch groups of services. It provides a nice output and a robust way to easily start up your local Hadoop cluster. You can find out more about Foreman [here](https://github.com/ddollar/foreman).
+
+Foreman uses a file called a 'Procfile' that defines what processes you want to start and stop. In your $HDP_DIR you can create a file called just `Procfile` that contains the following:
+
+```
+namenode: hadoop/bin/hdfs namenode
+secondarynn: hadoop/bin/hdfs secondarynamenode
+datanode: hadoop/bin/hdfs datanode
+resourcemgr: hadoop/bin/yarn resourcemanager
+nodemgr: hadoop/bin/yarn nodemanager
+
+```
+
+Then, to start up the Hadoop cluster you only need `cd` into `$HDP_DIR` and run:
+
+```
+foreman start
+```
+
+You will see something that looks like this:
+
